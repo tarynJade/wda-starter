@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Showing Movie Data from an API</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="module" src="./js/scripts.js"></script>
+</head>
+<body>
+    <h1>Movie Data</h1>
+    <div x-data="{
+        movies: [],
+        error: null,
+        loading: false,
+        async loadMovieData() {
+            // this.movies = ...
+        }
+    }">
+        <!-- ... -->
+    </div>
+</body>
+</html>
