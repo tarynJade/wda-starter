@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Favourites - Add Movies</title>
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-50 min-h-screen">
+    <header
+      class="fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between py-4 shadow-md px-4"
+    >
+      <div>
+        <a href="index.html" class="text-4xl pl-16 flex items-center gap-2">
+          <img
+            src="./scene-it-high-resolution-logo-transparent.png"
+            alt="SceneIt Logo"
+            class="w-30 h-10"
+          />
+        </a>
+      </div>
+      <div class="hidden md:flex md:items-center" id="menu">
+        <nav class="flex items-center space-x-6 text-gray-700 pr-16">
+          <a class="hover:text-[#D0465F]" href="index.html">Home</a>
+          <a class="hover:text-[#D0465F]" href="watchlist.html">My Watchlist</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="pt-24 pb-10 flex flex-col items-center">
+      <h1 class="text-3xl font-bold text-gray-800 mb-8">My Watchlist</h1>
+
+      <div class="w-full max-w-6xl px-4">
+        <div
+          id="watchlist-container"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          <!-- to add grid logic here -->
+          <div class="text-center text-gray-500 col-span-full py-12">
+            <p class="text-lg">No favourite movies yet.</p>
+            <p class="text-sm mt-2">
+              Add some movies to your favourites to see them here!
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
