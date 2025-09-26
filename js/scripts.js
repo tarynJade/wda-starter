@@ -2,52 +2,70 @@ let MovieHelper;
 
 // Function to load the MovieHelper module
 async function loadMovieHelper() {
-    if (!MovieHelper) {
-        const module = await import('./MovieHelper.js')
-        MovieHelper = module.default
-    }
-    return MovieHelper
+  if (!MovieHelper) {
+    const module = await import("./MovieHelper.js");
+    MovieHelper = module.default;
+  }
+  return MovieHelper;
 }
 
 // Helper function to get parameter from URL
 function getUrlParam(param) {
-  const urlParams = new URLSearchParams(window.location.search)
-  return urlParams.get(param)
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
 }
 
 let movieListComponent = {
   movies: [],
-  filter_year: '',
-  error: null,
+  filter_year: "",
+  search_query: "",
+  loading: false,
+  error: "",
   init() {
-    this.loadMovies()
+    this.loadMovies();
   },
+
   async loadMovies() {
+    this.loading = true;
 
-    // Load MovieHelper class
-    const MovieHelper = await loadMovieHelper()
+    try {
+      const MovieHelper = await loadMovieHelper();
 
-    // Get movies from API, using await because getMovies is an async function
-    // If filter_year is set, change what movies we load from the API
-    // You could do this by calling a different method, or passing arguments into getMovies()
-    this.movies = await MovieHelper.getMovies()
-  }
-}
+      const movieHelper = new MovieHelper();
+
+      if (this.search_query) {
+        this.movies = await movieHelper.searchMovies(this.search_query);
+      } else if (this.filter_year) {
+        this.movies = await movieHelper.getMoviesByYear(this.filter_year);
+      } else {
+        this.movies = await movieHelper.getMovies();
+      }
+    } catch (error) {
+      console.error("Error loading movies:", error);
+      this.error = "Failed to load movies";
+      this.movies = [];
+    } finally {
+      this.loading = false;
+    }
+  },
+};
 
 let movieComponent = {
   movie: null,
+  loading: false,
+  error: null,
   init() {
-    // Get movie parameter from URL that looks like this
-    //     movie.html?movie_id=456
-    // Add links to your index.html to point to movie.html?movie_id={your_movie_id}
-    const movie_id = getUrlParam('movie_id')
+    const movie_id = getUrlParam("movie_id");
 
     if (movie_id) {
-      this.loadMovie(movie_id)
+      this.loadMovie(movie_id);
     }
   },
   async loadMovie(movie_id) {
-    // Load actual movie data from API using movie_id
-    this.movie = movie_id
-  }
-}
+    const MovieHelper = await loadMovieHelper();
+
+    const movieHelper = new MovieHelper();
+
+    this.movie = await movieHelper.getMovieDetails(movie_id);
+  },
+};
