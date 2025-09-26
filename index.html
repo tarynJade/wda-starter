@@ -9,9 +9,23 @@
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              light: "#F5FBEF",
+              salmon: "#FD96A9",
+              navy: "#444B6E",
+              cerise: "#D0465F"
+            },
+          },
+        },
+      };
+    </script>
     <script src="./js/scripts.js"></script>
   </head>
-  <body class="pt-20 bg-[#444B6E]">
+  <body class="pt-20 bg-navy">
     <header
       class="fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between py-4 shadow-md px-4"
     >
@@ -28,17 +42,17 @@
         <nav class="flex items-center space-x-6 text-gray-700 pr-16">
           <a
             href="#search-section"
-            class="hover:text-[#D0465F] flex items-center gap-2"
+            class="hover:text-cerise flex items-center gap-2"
           >
             Search
           </a>
-          <a class="hover:text-[#D0465F]" href="index.html">Home</a>
-          <a class="hover:text-[#D0465F]" href="watchlist.html">My Watchlist</a>
+          <a class="hover:text-cerise" href="index.html">Home</a>
+          <a class="hover:text-cerise" href="watchlist.html">My Watchlist</a>
         </nav>
       </div>
     </header>
-    
-    <div class="py-1 bg-[#FD96A9]"></div>
+
+    <div class="py-1 bg-salmon"></div>
 
     <div x-data="movieListComponent" x-init="init()">
       <section class="bg-white py-8" id="search-section">
@@ -48,7 +62,7 @@
           </h2>
           <div class="flex justify-center items-center gap-4">
             <input
-              class="w-full md:w-96 p-4 text-sm text-gray-900 border border-[#444B6E] rounded-lg bg-white focus:ring-pink-400"
+              class="w-full md:w-96 p-4 text-sm text-gray-900 border border-navy rounded-lg bg-white focus:ring-pink-400"
               type="text"
               x-model="search_query"
               @input.debounce.300ms="loadMovies()"
@@ -58,11 +72,13 @@
 
           <div class="flex justify-end">
             <select
-              class="w-full md:w-auto border border-gray-300 rounded-lg bg-[#FD96A9] focus:ring-[#D0465F] p-3 flex justify-end"
+              class="w-full md:w-auto border border-gray-300 rounded-lg bg-salmon focus:ring-cerise p-3 flex justify-end"
               x-model="filter_year"
               @change="loadMovies()"
             >
-              <option label="New Release" value="New Release">New Releases</option>
+              <option label="New Release" value="New Release">
+                New Releases
+              </option>
               <option label="2024" value="2024">2024</option>
               <option label="2023" value="2023">2023</option>
               <option label="2022" value="2022">2022</option>
@@ -81,7 +97,7 @@
 
       <section class="container mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-bold text-[#FFF7F3]">Movies</h2>
+          <h2 class="text-2xl font-bold text-white">Movies</h2>
           <div x-show="filter_year !== ''">
             <span class="rounded-lg bg-gray-100 p-2 text-s text-gray-700">
               <span class="font-medium" x-text="filter_year"></span>
@@ -93,19 +109,18 @@
           class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
         >
           <div x-show="loading" class="col-span-full text-center py-8">
-            <div class="text-[#FFF7F3] text-lg">Loading movies...</div>
+            <div class="text-white text-lg">Loading movies...</div>
           </div>
 
-           <div
+          <div
             x-show="error"
             class="col-span-full text-center py-8 text-xl bg-white"
             x-text="error"
-          >
-          </div>
+          ></div>
 
           <template x-for="movie in movies" :key="movie.id">
             <div
-              class="group border-4 border-[#FD96A9] rounded-lg p-3 bg-white"
+              class="group border-4 border-salmon rounded-lg p-3 bg-white"
             >
               <img
                 @click="window.location.href =`movie.html?movie_id=${movie.id}`"
