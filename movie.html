@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Movie Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script
       defer
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
@@ -11,22 +12,38 @@
     <script src="./js/scripts.js"></script>
   </head>
   <body>
-    <header
-      class="fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between py-4 shadow-md px-4"
+<header
+      class="fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between py-2 md:py-4 shadow-md px-2 md:px-4"
     >
       <div>
-        <a href="index.html" class="text-4xl pl-16 flex items-center gap-2">
+        <a
+          href="index.html"
+          class="text-xl md:text-4xl pl-2 md:pl-16 flex items-center gap-2"
+        >
           <img
             src="./scene-it-high-resolution-logo-transparent.png"
             alt="SceneIt Logo"
-            class="w-30 h-10"
+            class="w-16 h-5 sm:w-24 sm:h-8 md:w-36 md:h-10"
           />
         </a>
       </div>
-      <div class="hidden md:flex md:items-center" id="menu">
-        <nav class="flex items-center space-x-6 text-gray-700 pr-16">
-          <a class="hover:text-[#D0465F]" href="index.html">Home</a>
-          <a class="hover:text-[#D0465F]" href="watchlist.html">My Watchlist</a>
+
+      <div class="flex items-center">
+        <nav
+          class="flex items-center space-x-2 sm:space-x-4 lg:space-x-6 text-gray-700 pr-2 md:pr-16"
+        >
+          <a
+            class="hover:text-cerise text-xs sm:text-sm lg:text-base"
+            href="index.html"
+          >
+            Home
+          </a>
+          <a
+            class="hover:text-cerise text-xs sm:text-sm lg:text-base"
+            href="watchlist.html"
+          >
+            My Watchlist
+          </a>
         </nav>
       </div>
     </header>
@@ -42,7 +59,7 @@
       >
         <div class="flex justify-between items-center mb-6 w-full">
           <h1 class="text-3xl" x-text="movie.title"></h1>
-          <button class="bg-red-600 rounded-lg text-white p-2 ml-auto">
+          <button class="bg-red-600 rounded-lg text-white p-2 ml-auto" aria-label="Add to watchlist">
             Add to Watchlist
           </button>
         </div>

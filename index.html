@@ -17,7 +17,7 @@
               light: "#F5FBEF",
               salmon: "#FD96A9",
               navy: "#444B6E",
-              cerise: "#D0465F"
+              cerise: "#D0465F",
             },
           },
         },
@@ -27,27 +27,43 @@
   </head>
   <body class="pt-20 bg-navy">
     <header
-      class="fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between py-4 shadow-md px-4"
+      class="fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between py-2 md:py-4 shadow-md px-2 md:px-4"
     >
       <div>
-        <a href="index.html" class="text-4xl pl-16 flex items-center gap-2">
+        <a
+          href="index.html"
+          class="text-xl md:text-4xl pl-2 md:pl-16 flex items-center gap-2"
+        >
           <img
             src="./scene-it-high-resolution-logo-transparent.png"
             alt="SceneIt Logo"
-            class="w-30 h-10"
+            class="w-16 h-5 sm:w-24 sm:h-8 md:w-36 md:h-10"
           />
         </a>
       </div>
-      <div class="hidden md:flex md:items-center" id="menu">
-        <nav class="flex items-center space-x-6 text-gray-700 pr-16">
+
+      <div class="flex items-center">
+        <nav
+          class="flex items-center space-x-2 sm:space-x-4 lg:space-x-6 text-gray-700 pr-2 md:pr-16"
+        >
           <a
             href="#search-section"
-            class="hover:text-cerise flex items-center gap-2"
+            class="hover:text-cerise text-xs sm:text-sm lg:text-base"
           >
             Search
           </a>
-          <a class="hover:text-cerise" href="index.html">Home</a>
-          <a class="hover:text-cerise" href="watchlist.html">My Watchlist</a>
+          <a
+            class="hover:text-cerise text-xs sm:text-sm lg:text-base"
+            href="index.html"
+          >
+            Home
+          </a>
+          <a
+            class="hover:text-cerise text-xs sm:text-sm lg:text-base"
+            href="watchlist.html"
+          >
+            My Watchlist
+          </a>
         </nav>
       </div>
     </header>
@@ -75,6 +91,7 @@
               class="w-full md:w-auto border border-gray-300 rounded-lg bg-salmon focus:ring-cerise p-3 flex justify-end"
               x-model="filter_year"
               @change="loadMovies()"
+              aria-label="filter by year"
             >
               <option label="New Release" value="New Release">
                 New Releases
@@ -119,9 +136,7 @@
           ></div>
 
           <template x-for="movie in movies" :key="movie.id">
-            <div
-              class="group border-4 border-salmon rounded-lg p-3 bg-white"
-            >
+            <div class="group border-4 border-salmon rounded-lg p-3 bg-white">
               <img
                 @click="window.location.href =`movie.html?movie_id=${movie.id}`"
                 class="w-full object-cover rounded-lg shadow-md group-hover:shadow-lg transition-shadow cursor-pointer"
