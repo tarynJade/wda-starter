@@ -63,6 +63,8 @@
           <h2 class="text-4xl text-center mb-6 text-black">
             Discover Your Next Favourite Film.
           </h2>
+
+          <!-- Search component-->
           <div class="flex justify-center items-center gap-4">
             <input
               class="w-full md:w-96 p-4 text-sm text-gray-900 border border-navy rounded-lg bg-white focus:ring-pink-400"
@@ -72,10 +74,10 @@
               placeholder="Search movies..."
             />
           </div>
-
-          <div class="flex justify-end">
+          <!-- Filters component-->
+          <div class="flex justify-end pt-6 space-x-2">
             <select
-              class="w-full md:w-auto border border-gray-300 rounded-lg bg-salmon focus:ring-cerise p-3 flex justify-end"
+              class="w-full md:w-auto border border-gray-300 rounded-lg bg-salmon focus:ring-cerise p-3 flex justify-end p-2"
               x-model="filter_year"
               @change="loadMovies()"
               aria-label="filter by year"
@@ -95,17 +97,61 @@
               <option label="2015" value="2015">2015</option>
               <option label="2014" value="2014">2014</option>
             </select>
+            <select
+              class="w-full sm:w-auto border border-gray-300 rounded-lg bg-salmon focus:ring-cerise p-3"
+              x-model="filter_genre"
+              @change="loadMovies()"
+              aria-label="filter by genre"
+            >
+              <option value="">Genre Filter</option>
+              <template x-for="genre in genres" :key="genre.id">
+                <option :value="genre.id" x-text="genre.name"></option>
+              </template>
+            </select>
+            <select
+              class="w-full sm:w-auto border border-gray-300 rounded-lg bg-salmon focus:ring-cerise p-3"
+              x-model="filter_runtime"
+              @change="loadMovies()"
+              aria-label="filter by runtime"
+            >
+              <option value="">Duration Filter</option>
+              <option value="short">Short (Under 90 min)</option>
+              <option value="medium">Medium (90-150 min)</option>
+              <option value="long">Long (Over 150 min)</option>
+            </select>
           </div>
         </div>
       </section>
 
-      <section class="container mx-auto px-4 py-8">
-        <div class="flex items-center justify-between mb-6">
+      <section class="container mx-auto px-4 py-8" id="movie-container">
+        <div class="flex items-center justify-between mb-6" id="movie-header-container">
           <h2 class="text-2xl font-bold text-white">Movies</h2>
+          <div class="flex justify-end gap-2" id="filters-container">
+           <!-- Year Filter Display -->
           <div x-show="filter_year !== ''">
             <span class="rounded-lg bg-gray-100 p-2 text-s text-gray-700">
               <span class="font-medium" x-text="filter_year"></span>
             </span>
+          </div>
+          <!-- Genre Filter Display -->
+          <div x-show="filter_genre !== ''">
+            <span class="rounded-lg bg-gray-100 p-2 text-s text-gray-700">
+              <span
+                class="font-medium"
+                x-text="genres.find(g => g.id == filter_genre).name || filter_genre"
+              ></span>
+            </span>
+          </div>
+
+          <!-- Runtime Filter Display -->
+          <div x-show="filter_runtime !== ''">
+            <span class="rounded-lg bg-gray-100 p-2 text-s text-gray-700">
+              <span
+                class="font-medium"
+                x-text="filter_runtime === 'short' ? 'Short (Under 90 min)' : filter_runtime === 'medium' ? 'Medium (90-150 min)' : filter_runtime === 'long' ? 'Long (Over 150 min)' : filter_runtime"
+              ></span>
+            </span>
+          </div>
           </div>
         </div>
 
