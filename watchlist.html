@@ -9,6 +9,21 @@
     ></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              light: "#F5FBEF",
+              salmon: "#FD96A9",
+              navy: "#444B6E",
+              cerise: "#D0465F"
+            },
+          },
+        },
+      };
+    </script>
+    <script src="./js/scripts.js"></script>
   </head>
 
   <body class="bg-gray-50 min-h-screen">
@@ -48,21 +63,79 @@
       </div>
     </header>
 
-    <main class="pt-24 pb-10 flex flex-col items-center">
-      <h1 class="text-3xl font-bold text-gray-800 mb-8">My Watchlist</h1>
+    <main class="pt-24 pb-10 flex flex-col items-center" x-data="watchlistComponent" x-init="init()">
+      <div class="flex items-center justify-between w-full max-w-6xl px-4 mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">My Watchlist</h1>
+        <button 
+          x-show="watchlist.length > 0"
+          @click="clearWatchlist()"
+          class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors"
+        >
+          Clear All
+        </button>
+      </div>
 
       <div class="w-full max-w-6xl px-4">
+        <!-- Empty watchlist logic -->
+        <div x-show="watchlist.length === 0" class="text-center text-gray-500 py-12">
+          <p class="text-lg">No favourite movies yet.</p>
+          <p class="text-sm mt-2 mb-4">
+            Add some movies to your favourites to see them here!
+          </p>
+          <a 
+            href="index.html" 
+            class="inline-block px-6 py-3 bg-salmon hover:bg-cerise text-white rounded-lg font-semibold transition-colors"
+          >
+            Click here to browse Movies
+          </a>
+        </div>
+
+        <!-- Watchlist grid -->
         <div
-          id="watchlist-container"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          x-show="watchlist.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
         >
-          <!-- to add grid logic here -->
-          <div class="text-center text-gray-500 col-span-full py-12">
-            <p class="text-lg">No favourite movies yet.</p>
-            <p class="text-sm mt-2">
-              Add some movies to your favourites to see them here!
-            </p>
-          </div>
+          <template x-for="movie in watchlist" :key="movie.id">
+            <div class="group border-4 border-salmon rounded-lg p-3 bg-white relative">
+              <!-- Remove button -->
+              <button
+                @click="removeFromWatchlist(movie.id)"
+                class="absolute top-2 right-2 p-2 z-10 w-10 h-10 bg-red-500 rounded-full hover:bg-salmon "
+                title="Remove from watchlist"
+              >
+                <img 
+                  src="./flat_cross_icon.svg.png" 
+                  alt="Remove" 
+                  class="w-full h-full"
+                />
+              </button>
+              
+              <!-- Movie poster -->
+              <img
+                @click="window.location.href = `movie.html?movie_id=${movie.id}`"
+                class="w-full object-cover rounded-lg shadow-md group-hover:shadow-lg transition-shadow cursor-pointer"
+                :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`"
+                :alt="movie.title"
+              />
+              
+              <!-- Movie title -->
+              <a
+                :href="`movie.html?movie_id=${movie.id}`"
+                x-text="movie.title"
+                class="block text-center text-sm font-medium text-gray-900 hover:text-blue-600 mt-2 leading-tight"
+              ></a>
+              
+              <!-- Movie info -->
+              <div class="mt-2 text-xs text-gray-600 text-center">
+                <p x-show="movie.release_date" class="mb-1">
+                  <span x-text="new Date(movie.release_date).getFullYear()"></span>
+                </p>
+                <p x-show="movie.vote_average" class="text-yellow-600">
+                  ⭐ <span x-text="Math.round(movie.vote_average * 10) / 10"></span>/10
+                </p>
+              </div>
+            </div>
+          </template>
         </div>
       </div>
     </main>

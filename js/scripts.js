@@ -21,9 +21,48 @@ function getUrlParam(param) {
   return urlParams.get(param);
 }
 
+// Shared watchlist utilities
+const watchlistUtils = {
+  load() {
+    const saved = localStorage.getItem('movie_watchlist');
+    return saved ? JSON.parse(saved) : [];
+  },
+
+  save(watchlist) {
+    localStorage.setItem('movie_watchlist', JSON.stringify(watchlist));
+  },
+
+  isInWatchlist(watchlist, movieId) {
+    return watchlist.some(movie => movie.id === movieId);
+  },
+
+  addToWatchlist(watchlist, movie) {
+    if (!this.isInWatchlist(watchlist, movie.id)) {
+      const updatedWatchlist = [...watchlist, {
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+        overview: movie.overview,
+        vote_average: movie.vote_average
+      }];
+      this.save(updatedWatchlist);
+      return updatedWatchlist;
+    }
+    return watchlist;
+  },
+
+  removeFromWatchlist(watchlist, movieId) {
+    const updatedWatchlist = watchlist.filter(movie => movie.id !== movieId);
+    this.save(updatedWatchlist);
+    return updatedWatchlist;
+  }
+};
+
 let movieListComponent = {
   movies: [],
   genres: [],
+  watchlist: [],
   filter_year: "",
   filter_genre: "",
   filter_runtime: "",
@@ -33,8 +72,8 @@ let movieListComponent = {
 
   async init() {
     this.loadPersistedFilters();
-    await this.loadGenres(); // Load genres first
-    await this.loadMovies();  // Then load movies
+    await this.loadGenres();
+    await this.loadMovies();
   },
 
   loadPersistedFilters() {
@@ -104,19 +143,83 @@ let movieListComponent = {
   },
 };
 
+let watchlistComponent = {
+  watchlist: [],
+  loading: false,
+  
+  init() {
+    this.loadWatchlist();
+  },
+
+  loadWatchlist() {
+    this.watchlist = watchlistUtils.load();
+  },
+
+  removeFromWatchlist(movieId) {
+    this.watchlist = watchlistUtils.removeFromWatchlist(this.watchlist, movieId);
+  },
+
+  clearWatchlist() {
+    if (confirm('Are you sure you want to clear your entire watchlist?')) {
+      this.watchlist = [];
+      watchlistUtils.save(this.watchlist);
+    }
+  }
+};
+
 let movieComponent = {
   movie: null,
+  watchlist: [],
+  castList: [],
   loading: false,
   error: null,
+  
   init() {
     const movie_id = getUrlParam("movie_id");
-
+    this.loadWatchlist();
+    
     if (movie_id) {
       this.loadMovie(movie_id);
     }
   },
+
+  loadWatchlist() {
+    this.watchlist = watchlistUtils.load();
+  },
+
+  isInWatchlist(movieId) {
+    return watchlistUtils.isInWatchlist(this.watchlist, movieId);
+  },
+
+  addToWatchlist(movie) {
+    this.watchlist = watchlistUtils.addToWatchlist(this.watchlist, movie);
+  },
+
+  removeFromWatchlist(movieId) {
+    this.watchlist = watchlistUtils.removeFromWatchlist(this.watchlist, movieId);
+  },
+
+  toggleWatchlist(movie) {
+    if (this.isInWatchlist(movie.id)) {
+      this.removeFromWatchlist(movie.id);
+    } else {
+      this.addToWatchlist(movie);
+    }
+  },
+
   async loadMovie(movie_id) {
-    const movieHelper = await getMovieHelper();
-    this.movie = await movieHelper.getMovieDetails(movie_id);
+    this.loading = true;
+    this.error = null;
+    try {
+      const movieHelper = await getMovieHelper();
+      this.movie = await movieHelper.getMovieDetails(movie_id);
+      this.castList = await movieHelper.getMovieCast(movie_id);
+    } catch (error) {
+      console.error("Error loading movie:", error);
+      this.error = "Failed to load movie details";
+    } finally {
+      this.loading = false;
+    }
   },
 };
+

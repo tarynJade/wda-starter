@@ -107,4 +107,12 @@ async getMovieDetails(movieId){
   return json;
 }
 
+async getMovieCast(movieId){
+  const response = await this.apiRequest(`movie/${movieId}/credits`);
+  const json = await response.json();
+  const cast = json.cast
+  const castList = cast.slice(0, 5)
+  return castList;
+}
+
 }

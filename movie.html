@@ -9,6 +9,20 @@
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              light: "#F5FBEF",
+              salmon: "#FD96A9",
+              navy: "#444B6E",
+              cerise: "#D0465F"
+            },
+          },
+        },
+      };
+    </script>
     <script src="./js/scripts.js"></script>
   </head>
   <body>
@@ -58,16 +72,22 @@
         x-show="movie"
       >
         <div class="flex justify-between items-center mb-6 w-full">
-          <h1 class="text-3xl" x-text="movie.title"></h1>
-          <button class="bg-red-600 rounded-lg text-white p-2 ml-auto" aria-label="Add to watchlist">
-            Add to Watchlist
+          <h1 class="text-3xl" x-text="movie?.title || 'Loading...'"></h1>
+          <button 
+            @click="toggleWatchlist(movie)"
+            class="rounded-lg text-white p-3 px-6 ml-auto font-semibold transition-colors"
+            :class="movie && isInWatchlist(movie.id) ? 'bg-red-700' : 'bg-red-300'"
+            :aria-label="movie && isInWatchlist(movie.id) ? 'Remove from watchlist' : 'Add to watchlist'"
+            x-text="movie && isInWatchlist(movie.id) ? 'Remove from Watchlist' : 'Add to Watchlist'"
+            :disabled="!movie"
+          >
           </button>
         </div>
         <div class="flex flex-col md:flex-row gap-8 items-center w-full">
           <img
             class="w-72 h-auto rounded shadow"
-            :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`"
-            :alt="movie.title"
+            :src="movie?.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : ''"
+            :alt="movie?.title || 'Movie poster'"
           />
           <div
             class="flex-1 flex flex-col items-center md:items-start text-center md:text-left w-full"
@@ -77,12 +97,37 @@
             </p>
             <div class="flex flex-col w-full items-center md:items-start">
               <p class="mb-2">
-                <strong>Release Date:</strong>
-                <span x-text="movie?.release_date"></span>
+                <strong>Release Year:</strong>
+                <span x-text="movie?.release_date ? new Date(movie.release_date).getFullYear() : 'Unknown'"></span>
+              </p>
+              <p>
+                <strong>Genre:</strong>
+                <ul>
+                  <template x-for="(genre, index) in movie?.genres || []" :key="genre.id">
+                    <li x-text="genre.name"></li>
+                  </template>
+                </ul>
+              </p>
+              <p>
+                <strong>Cast: </strong>
+                <ul>
+                  <template x-for="(actor, index) in castList" :key="actor.id">
+                    <li>
+                      <a class="text-cerise" x-text="actor.name" :href="`https://www.themoviedb.org/person/${actor.id}-${actor.name[0]}-${actor.name[1]}`" target="_blank">
+                    </a>
+                    </li>
+                  </template>
+                </ul>
+              </p>
+              <p>
+                <strong>Duration:</strong>
+                <span x-text="`${movie.runtime} minutes`"></span>
               </p>
               <p>
                 <strong>Rating:</strong>
-                <span x-text="movie?.vote_average"></span>/10
+                <p x-show="movie.vote_average" class="text-yellow-600">
+                  ⭐ <span x-text="Math.round(movie.vote_average * 10) / 10"></span>/10
+                </p>
               </p>
             </div>
           </div>
