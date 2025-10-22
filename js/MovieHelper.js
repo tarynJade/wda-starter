@@ -111,8 +111,15 @@ async getMovieCast(movieId){
   const response = await this.apiRequest(`movie/${movieId}/credits`);
   const json = await response.json();
   const cast = json.cast
-  const castList = cast.slice(0, 5)
+  const castList = cast.slice(0, 6)
   return castList;
+}
+
+async getMovieTrailer(movieId){
+  const response = await this.apiRequest(`movie/${movieId}/videos`);
+  const json = await response.json();
+  const trailers = json.results.filter(video => video.site === "YouTube" && video.type === "Trailer");
+  return trailers.length > 0 ? trailers[0] : null;
 }
 
 }

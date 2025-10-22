@@ -171,6 +171,7 @@ let movieComponent = {
   movie: null,
   watchlist: [],
   castList: [],
+  trailer: null,
   loading: false,
   error: null,
   
@@ -214,6 +215,7 @@ let movieComponent = {
       const movieHelper = await getMovieHelper();
       this.movie = await movieHelper.getMovieDetails(movie_id);
       this.castList = await movieHelper.getMovieCast(movie_id);
+      this.trailer = await movieHelper.getMovieTrailer(movie_id)
     } catch (error) {
       console.error("Error loading movie:", error);
       this.error = "Failed to load movie details";

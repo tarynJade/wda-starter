@@ -26,7 +26,7 @@
     <script src="./js/scripts.js"></script>
   </head>
   <body>
-<header
+    <header
       class="fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between py-2 md:py-4 shadow-md px-2 md:px-4"
     >
       <div>
@@ -65,17 +65,19 @@
     <div
       x-data="movieComponent"
       x-init="init()"
-      class="flex justify-center items-center pt-40"
+      class="flex justify-center items-center pt-20"
     >
+
+
       <div
-        class="max-w-3xl rounded-lg shadow-lg p-10 flex flex-col items-center"
+        class="max-w-4xl rounded-lg shadow-lg p-8 flex flex-col items-center"
         x-show="movie"
       >
-        <div class="flex justify-between items-center mb-6 w-full">
-          <h1 class="text-3xl" x-text="movie?.title || 'Loading...'"></h1>
+        <div class="flex justify-between items-center w-full mb-6 gap-4 sm:flex-col">
+          <h1 class="text-3xl font-bold" x-text="movie.title"></h1>
           <button 
             @click="toggleWatchlist(movie)"
-            class="rounded-lg text-white p-3 px-6 ml-auto font-semibold transition-colors"
+            class="rounded-lg text-white p-3 px-6 font-semibold transition-colors"
             :class="movie && isInWatchlist(movie.id) ? 'bg-red-700' : 'bg-red-300'"
             :aria-label="movie && isInWatchlist(movie.id) ? 'Remove from watchlist' : 'Add to watchlist'"
             x-text="movie && isInWatchlist(movie.id) ? 'Remove from Watchlist' : 'Add to Watchlist'"
@@ -83,12 +85,43 @@
           >
           </button>
         </div>
-        <div class="flex flex-col md:flex-row gap-8 items-center w-full">
+
+        <div x-show="trailer && trailer.key" class="w-full mb-8">
+          <div x-data="{ showTrailer: false }">
+            <button 
+              @click="showTrailer = !showTrailer"
+              class="bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors mb-4"
+              x-text="showTrailer ? 'Hide Trailer' : '▶️ Watch Trailer'"
+            >
+            </button>
+            <div x-show="showTrailer" x-transition class="relative w-full mx-auto max-w-2xl" style="padding-bottom: 45%;">
+              <iframe
+                :src="showTrailer && trailer?.key ? `https://www.youtube.com/embed/${trailer.key}` : ''"
+                class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+                frameborder="0"
+                allow="picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8 w-full">
+          <div>
           <img
-            class="w-72 h-auto rounded shadow"
-            :src="movie?.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : ''"
+            class="w-48 h-72 sm:w-56 sm:h-84 md:w-64 md:h-96 rounded shadow object-cover mx-auto md:mx-0"
+            :src="movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ''"
             :alt="movie?.title || 'Movie poster'"
           />
+           <p x-show="movie.vote_average" class="text-yellow-600 text-2xl p-4 pl-0">
+              ⭐ <span x-text="Math.round(movie.vote_average * 10) / 10"></span>/10
+              </p>
+            <p>
+                <strong>Runtime:</strong>
+                <span x-text="`${movie.runtime} minutes`"></span>
+              </p>
+          </div>
+
           <div
             class="flex-1 flex flex-col items-center md:items-start text-center md:text-left w-full"
           >
@@ -102,32 +135,32 @@
               </p>
               <p>
                 <strong>Genre:</strong>
-                <ul>
+                <ul class="pb-4">
                   <template x-for="(genre, index) in movie?.genres || []" :key="genre.id">
                     <li x-text="genre.name"></li>
                   </template>
                 </ul>
               </p>
-              <p>
+              <p class="mb-4">
                 <strong>Cast: </strong>
-                <ul>
+                <div class="flex flex-wrap gap-4 mt-2">
                   <template x-for="(actor, index) in castList" :key="actor.id">
-                    <li>
-                      <a class="text-cerise" x-text="actor.name" :href="`https://www.themoviedb.org/person/${actor.id}-${actor.name[0]}-${actor.name[1]}`" target="_blank">
-                    </a>
-                    </li>
+                    <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-2">
+                      <img
+                        class="w-12 h-12 rounded-full object-cover shadow"
+                        :src="actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/48x48'"
+                        :alt="actor.name + ' profile photo'"
+                      >
+                      <a 
+                        class="text-blue-600 underline hover:text-blue-800 text-sm" 
+                        x-text="actor.name"
+                        :href="`https://www.themoviedb.org/person/${actor.id}`" 
+                        target="_blank"
+                      >
+                      </a>
+                    </div>
                   </template>
-                </ul>
-              </p>
-              <p>
-                <strong>Duration:</strong>
-                <span x-text="`${movie.runtime} minutes`"></span>
-              </p>
-              <p>
-                <strong>Rating:</strong>
-                <p x-show="movie.vote_average" class="text-yellow-600">
-                  ⭐ <span x-text="Math.round(movie.vote_average * 10) / 10"></span>/10
-                </p>
+                </div>
               </p>
             </div>
           </div>
