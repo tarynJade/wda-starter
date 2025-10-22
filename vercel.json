@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-eval' https://unpkg.com https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; img-src 'self' https://image.tmdb.org data:; connect-src 'self' https://api.themoviedb.org; font-src 'self' https://fonts.gstatic.com; object-src 'none'; base-uri 'self';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; img-src 'self' https://image.tmdb.org https://img.youtube.com data:; connect-src 'self' https://api.themoviedb.org; font-src 'self' https://fonts.gstatic.com; frame-src https://www.youtube.com; object-src 'none'; base-uri 'self';"
         },
         {
           "key": "X-Frame-Options",
