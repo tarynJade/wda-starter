@@ -122,4 +122,11 @@ async getMovieTrailer(movieId){
   return trailers.length > 0 ? trailers[0] : null;
 }
 
+async getMovieRecommendations(movieId){
+  const response = await this.apiRequest(`movie/${movieId}/recommendations`);
+  const json = await response.json();
+  console.log(json)
+  return json;
+}
+
 }

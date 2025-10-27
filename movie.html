@@ -67,33 +67,35 @@
       x-init="init()"
       class="flex justify-center items-center pt-20"
     >
-
-
       <div
         class="max-w-4xl rounded-lg shadow-lg p-8 flex flex-col items-center"
         x-show="movie"
       >
+        <!-- Movie Title -->
         <div class="flex justify-between items-center w-full mb-6 gap-4 sm:flex-col">
           <h1 class="text-3xl font-bold" x-text="movie.title"></h1>
-          <button 
-            @click="toggleWatchlist(movie)"
-            class="rounded-lg text-white p-3 px-6 font-semibold transition-colors"
-            :class="movie && isInWatchlist(movie.id) ? 'bg-red-700' : 'bg-red-300'"
-            :aria-label="movie && isInWatchlist(movie.id) ? 'Remove from watchlist' : 'Add to watchlist'"
-            x-text="movie && isInWatchlist(movie.id) ? 'Remove from Watchlist' : 'Add to Watchlist'"
-            :disabled="!movie"
-          >
-          </button>
         </div>
 
+        <!-- Trailer button and Add to / remove from watchlist button -->
         <div x-show="trailer && trailer.key" class="w-full mb-8">
           <div x-data="{ showTrailer: false }">
-            <button 
-              @click="showTrailer = !showTrailer"
-              class="bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors mb-4"
-              x-text="showTrailer ? 'Hide Trailer' : '▶️ Watch Trailer'"
-            >
-            </button>
+            <div class="flex justify-between">
+              <button 
+                @click="showTrailer = !showTrailer"
+                class="bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors mb-4"
+                x-text="showTrailer ? 'Hide Trailer' : '▶️ Watch Trailer'"
+              >
+              </button>
+              <button 
+                @click="toggleWatchlist(movie)"
+                class="rounded-lg text-white p-3 px-6 mb-4 font-semibold transition-colors"
+                :class="movie && isInWatchlist(movie.id) ? 'bg-red-700' : 'bg-red-300'"
+                :aria-label="movie && isInWatchlist(movie.id) ? 'Remove from watchlist' : 'Add to watchlist'"
+                x-text="movie && isInWatchlist(movie.id) ? 'Remove from Watchlist' : 'Add to Watchlist'"
+                :disabled="!movie"
+              >
+              </button>
+            </div>
             <div x-show="showTrailer" x-transition class="relative w-full mx-auto max-w-2xl" style="padding-bottom: 45%;">
               <iframe
                 :src="showTrailer && trailer?.key ? `https://www.youtube.com/embed/${trailer.key}` : ''"
@@ -106,20 +108,21 @@
           </div>
         </div>
 
+        <!-- Movie information -->
         <div class="flex flex-col md:flex-row gap-8 w-full">
           <div>
-          <img
-            class="w-48 h-72 sm:w-56 sm:h-84 md:w-64 md:h-96 rounded shadow object-cover mx-auto md:mx-0"
-            :src="movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ''"
-            :alt="movie?.title || 'Movie poster'"
-          />
-           <p x-show="movie.vote_average" class="text-yellow-600 text-2xl p-4 pl-0">
-              ⭐ <span x-text="Math.round(movie.vote_average * 10) / 10"></span>/10
-              </p>
+            <img
+              class="w-48 h-72 sm:w-56 sm:h-84 md:w-64 md:h-96 rounded shadow object-cover mx-auto md:mx-0"
+              :src="movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ''"
+              :alt="movie?.title || 'Movie poster'"
+            />
+            <p x-show="movie.vote_average" class="text-yellow-600 text-2xl p-4 pl-0">
+              ⭐ <span x-text="Math.round(movie.vote_average * 10) / 10"></span>
+            </p>
             <p>
-                <strong>Runtime:</strong>
-                <span x-text="`${movie.runtime} minutes`"></span>
-              </p>
+              <strong>Runtime:</strong>
+              <span x-text="`${movie.runtime} minutes`"></span>
+            </p>
           </div>
 
           <div
@@ -163,6 +166,27 @@
                 </div>
               </p>
             </div>
+          </div>
+        </div>
+
+        <div x-show="recommendations" class="w-full mt-8">
+          <h1 class="text-2xl pb-2">More movies like this one:</h1>
+          <div class="flex overflow-x-auto gap-4 bg-navy p-6">
+            <template x-for="recommendation in recommendations.slice(0,8)" :key="recommendation.id">
+              <div class=" flex-shrink-0 w-32 sm:w-36 md:w-40 lg:w-44 border-2 border-salmon rounded-lg p-3 bg-white">
+                <img
+                  @click="window.location.href =`movie.html?movie_id=${recommendation.id}`"
+                  class="w-full h-72 rounded-md"
+                  :src="`https://image.tmdb.org/t/p/w300${recommendation.poster_path}`"
+                  :alt="recommendation.title"
+                />
+                <a
+                  :href="`movie.html?movie_id=${recommendation.id}`"
+                  x-text="recommendation.title"
+                  class="block text-center text-sm font-medium text-gray-900 hover:text-blue-600 mt-2 leading-tight"
+                ></a>
+              </div>
+            </template>
           </div>
         </div>
       </div>
