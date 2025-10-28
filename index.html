@@ -169,7 +169,7 @@
             <div class="group border-4 border-salmon rounded-lg p-3 bg-white">
               <img
                 @click="window.location.href =`movie.html?movie_id=${movie.id}`"
-                class="w-full object-cover rounded-lg shadow-md group-hover:shadow-lg transition-shadow cursor-pointer"
+                class="w-full h-84 object-cover rounded-lg shadow-md group-hover:shadow-lg transition-shadow cursor-pointer"
                 :src="`https://image.tmdb.org/t/p/w300${movie.poster_path}`"
                 :alt="movie.title"
               />
