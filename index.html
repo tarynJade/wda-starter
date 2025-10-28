@@ -135,7 +135,7 @@
             <span class="rounded-lg bg-gray-100 p-2 text-s text-gray-700">
               <span
                 class="font-medium"
-                x-text="genres.find(g => g.id == filter_genre).name || filter_genre"
+                x-text="genres.find(g => g.id == filter_genre)?.name"
               ></span>
             </span>
           </div>

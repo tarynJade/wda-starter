@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>Movie Details</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -70,7 +70,19 @@
       >
         <!-- Movie Title -->
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
-          <h1 class="text-xl sm:text-2xl md:text-3xl font-bold sm:text-left" x-text="movie.title"></h1>
+          <h1 class="text-xl sm:text-2xl md:text-3xl font-bold sm:text-left" x-text="movie?.title"></h1>
+        </div>
+
+        <div class="w-full mb-2">
+           <button 
+                @click="toggleWatchlist(movie)"
+                class="text-white font-semibold py-3 px-4 rounded-lg text-sm transition-colors mb-4"
+                :class="movie && isInWatchlist(movie.id) ? 'bg-cerise hover:bg-salmon' : 'bg-cerise hover:bg-salmon'"
+                :aria-label="movie && isInWatchlist(movie.id) ? 'Remove from watchlist' : 'Add to watchlist'"
+                x-text="movie && isInWatchlist(movie.id) ? 'Remove from Watchlist' : 'Add to Watchlist'"
+                :disabled="!movie"
+              >
+              </button>
         </div>
 
         <!-- Trailer button and Add to / remove from watchlist button -->
@@ -79,17 +91,8 @@
             <div class="flex justify-between">
               <button 
                 @click="showTrailer = !showTrailer"
-                class="bg-red-700 text-white font-semibold py-3 px-4 rounded-lg text-sm transition-colors mb-4"
+                class="bg-red-700 hover:bg-red-300 text-white font-semibold py-3 px-4 rounded-lg text-sm transition-colors mb-4"
                 x-text="showTrailer ? 'Hide Trailer' : '▶️ Watch Trailer'"
-              >
-              </button>
-              <button 
-                @click="toggleWatchlist(movie)"
-                class="text-white font-semibold py-3 px-4 rounded-lg text-sm transition-colors mb-4"
-                :class="movie && isInWatchlist(movie.id) ? 'bg-cerise' : 'bg-salmon'"
-                :aria-label="movie && isInWatchlist(movie.id) ? 'Remove from watchlist' : 'Add to watchlist'"
-                x-text="movie && isInWatchlist(movie.id) ? 'Remove from Watchlist' : 'Add to Watchlist'"
-                :disabled="!movie"
               >
               </button>
             </div>
@@ -113,12 +116,12 @@
               :src="movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ''"
               :alt="movie?.title || 'Movie poster'"
             />
-            <p x-show="movie.vote_average" class="text-yellow-600 text-2xl p-4 pl-0">
-              ⭐ <span x-text="Math.round(movie.vote_average * 10) / 10"></span>
+            <p x-show="movie?.vote_average" class="text-2xl p-4 pl-0">
+              ⭐ <span x-text="Math.round(movie?.vote_average * 10) / 10"></span>
             </p>
             <p>
               <strong>Runtime:</strong>
-              <span x-text="`${movie.runtime} minutes`"></span>
+              <span x-text="`${movie?.runtime} minutes`"></span>
             </p>
           </div>
 
@@ -131,7 +134,7 @@
             <div class="flex flex-col w-full items-center md:items-start">
               <p class="mb-2">
                 <strong>Release Year:</strong>
-                <span x-text="movie?.release_date ? new Date(movie.release_date).getFullYear() : 'Unknown'"></span>
+                <span x-text="movie?.release_date ? new Date(movie.release_date).getFullYear() : 'Unknown Year'"></span>
               </p>
               <p>
                 <strong>Genre:</strong>
