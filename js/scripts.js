@@ -71,6 +71,13 @@ let movieListComponent = {
   error: "",
 
   async init() {
+
+     if (this.initialized) {
+      return;
+    }
+
+    this.initialized = true;
+
     this.loadPersistedFilters();
     await this.loadGenres();
     await this.loadMovies();
@@ -100,7 +107,6 @@ let movieListComponent = {
     }
   },
 
-  // Parse runtime helper method
   parseRuntimeFilter() {
     if (!this.filter_runtime) return {};
     
@@ -124,7 +130,6 @@ let movieListComponent = {
       if (this.search_query) {
         this.movies = await movieHelper.searchMovies(this.search_query);
       } else if (this.filter_year || this.filter_genre || this.filter_runtime) {
-        // Use combined filters
         this.movies = await movieHelper.getMoviesWithFilters({
           year: this.filter_year,
           genre: this.filter_genre,
@@ -175,18 +180,20 @@ let movieComponent = {
   recommendations: [],
   loading: false,
   error: null,
+  movieId: null,
   
   init() {
     const movie_id = getUrlParam("movie_id");
     this.loadWatchlist();
     
-    if (movie_id) {
+    if (movie_id && movie_id !== this.movieId) { 
       this.loadMovie(movie_id);
     }
   },
 
   loadWatchlist() {
     this.watchlist = watchlistUtils.load();
+    
   },
 
   isInWatchlist(movieId) {
@@ -210,6 +217,11 @@ let movieComponent = {
   },
 
   async loadMovie(movie_id) {
+     if (this.loading || this.movieId === movie_id) {
+      return;
+     }
+    
+    this.movieId = movie_id;
     this.loading = true;
     this.error = null;
     try {
