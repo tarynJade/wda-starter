@@ -125,7 +125,6 @@ async getMovieTrailer(movieId){
 async getMovieRecommendations(movieId){
   const response = await this.apiRequest(`movie/${movieId}/recommendations`);
   const json = await response.json();
-  console.log(json)
   return json;
 }
 
