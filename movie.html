@@ -115,6 +115,7 @@
               class="w-48 h-72 sm:w-56 sm:h-84 md:w-64 md:h-96 rounded shadow object-cover mx-auto md:mx-0"
               :src="movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ''"
               :alt="movie?.title || 'Movie poster'"
+              width="300" height="450"
             />
             <p x-show="movie?.vote_average" class="text-2xl p-4 pl-0">
               ⭐ <span x-text="Math.round(movie?.vote_average * 10) / 10"></span>
@@ -180,6 +181,7 @@
                   class="h-72 rounded-md"
                   :src="`https://image.tmdb.org/t/p/w300${recommendation.poster_path}`"
                   :alt="recommendation.title"
+                  width="300" height="450"
                 />
                 <a
                   :href="`movie.html?movie_id=${recommendation.id}`"
