@@ -6,24 +6,11 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              light: "#F5FBEF",
-              salmon: "#FD96A9",
-              navy: "#444B6E",
-              cerise: "#D0465F"
-            },
-          },
-        },
-      };
-    </script>
+    <script src="./js/tailwindConfig.js"></script>
     <script src="./js/scripts.js"></script>
   </head>
 
-  <body class="bg-gray-50 min-h-screen">
+  <body class="bg-navy min-h-screen">
    <header
       class="fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between py-2 md:py-4 shadow-md px-2 md:px-4"
     >
@@ -33,7 +20,7 @@
           class="text-xl md:text-4xl pl-2 md:pl-16 flex items-center gap-2"
         >
           <img
-            src="./scene-it-high-resolution-logo-transparent.png"
+            src="./assets/scene-it-high-resolution-logo-transparent.png"
             alt="SceneIt Logo"
             class="w-16 h-5 sm:w-24 sm:h-8 md:w-36 md:h-10"
           />
@@ -62,11 +49,11 @@
 
     <main class="pt-24 pb-10 flex flex-col items-center" x-data="watchlistComponent" x-init="init()">
       <div class="flex items-center justify-between w-full max-w-6xl px-4 mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">My Watchlist</h1>
+        <h1 class="text-3xl font-bold text-white">My Watchlist</h1>
         <button 
           x-show="watchlist.length > 0"
           @click="clearWatchlist()"
-          class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors"
+          class="px-4 py-2 bg-cerise hover:bg-salmon text-white rounded-lg font-semibold transition-colors"
         >
           Clear All
         </button>
@@ -101,7 +88,7 @@
                 title="Remove from watchlist"
               >
                 <img 
-                  src="./flat_cross_icon.svg.png" 
+                  src="./assets/flat_cross_icon.svg.png" 
                   alt="Remove" 
                   class="w-full h-full"
                 />
